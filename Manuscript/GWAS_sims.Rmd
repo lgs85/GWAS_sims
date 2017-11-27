@@ -1,0 +1,137 @@
+---
+output:
+  pdf_document:
+header-includes: \usepackage{graphicx}
+    \usepackage{setspace}
+    \doublespacing
+    \usepackage{lineno}
+    \linenumbers
+---
+```{r setup, include = F}
+
+rm(list=ls())
+
+#Load knitr 
+library(knitr)
+
+#Set some options
+options(na.action='na.fail')
+opts_knit$set(root.dir = '..')
+opts_chunk$set(echo=FALSE,
+               warning=FALSE,
+               message=FALSE,
+               fig.width=8,
+               fig.height=8)
+
+```
+
+```{r load and clean, include = F}
+
+#Load and clean data
+source('Scripts/GWAS_sims_LOAD.R')
+source('Scripts/GWAS_sims_FUNCTIONS.R')
+source('Scripts/GWAS_sims_CLEAN.R')
+
+```
+
+
+#GWAS simulations - results
+
+
+###Heritability
+
+```{r Figure 1}
+
+# vline.dat <- ddply(h1,
+#                    .(Nids,Nsnps),
+#                    summarise,
+#                    med_h2 = median(H2))
+#   
+
+Fig1 <- ggplot(h1,aes(x = H2))+
+          geom_density(fill = "orange",alpha = 0.4)+
+          # geom_vline(aes(xintercept = med_h2),data = vline.dat,col = "red")+
+          facet_grid(factor(Nids)~factor(Nsnps))+
+          geom_vline(aes(xintercept = 0.4),lty = 2)+
+          theme_bw()+
+          xlab("Heritability estimates")+
+          ylab("Density")
+
+Fig1
+
+```
+**Figure 1** Density blah blah
+
+\pagebreak
+
+###GWAS - Number of QTL detected
+
+```{r Figure 2}
+
+Fig2 <- subset(g1,SNP.Name %in% paste0("Q",c(1:10))) %>%
+        ddply(
+              .(Nids,Nsnps,HistN,Full.Iteration.ID),
+              summarise,
+              N_Sig_QTL = sum(Sig.Corrected == "yes")
+              ) %>%
+        ggplot(
+             aes(x = N_Sig_QTL)
+             )+
+            geom_density(fill = "orange",alpha = 0.4,adjust = 1.5)+
+            xlim(c(0,12))+
+            facet_grid(factor(Nids)~factor(Nsnps))+
+            geom_vline(aes(xintercept = 10),lty = 2)+
+            theme_bw()
+
+Fig2
+
+
+```
+**Figure 2** Density blah blah
+
+\pagebreak
+
+###GWAS - Non-QTL hits
+
+```{r Figure 3}
+
+Fig3 <-  subset(g1,!(SNP.Name %in% paste0("Q",c(1:10)))) %>%
+  ddply(.(Nids,Nsnps,HistN,Full.Iteration.ID),
+              summarise,
+              N_Sig_QTL = sum(Sig.Corrected == "yes")
+              ) %>%
+        ggplot(
+             aes(x = N_Sig_QTL)
+             )+
+            geom_density(fill = "orange",alpha = 0.4,adjust = 1.5)+
+            facet_grid(factor(Nids)~factor(Nsnps),scales = "free_y")+
+            theme_bw()
+
+Fig3
+
+```
+**Figure 3** Density blah blah
+
+\pagebreak
+
+
+
+
+###Regional heritability
+
+```{r Figure 4}
+
+Fig4 <- ggplot(q1,aes(x = Var))+
+          geom_density(fill = "orange",alpha = 0.4)+
+          # geom_vline(aes(xintercept = med_h2),data = vline.dat,col = "red")+
+          facet_grid(factor(Nids)~factor(Nsnps))+
+          theme_bw()+
+          xlab("Heritability estimates")+
+          ylab("Density")
+
+Fig4
+
+head(q1)
+
+```
+
