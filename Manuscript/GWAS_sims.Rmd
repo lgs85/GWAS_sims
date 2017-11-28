@@ -18,7 +18,7 @@ library(knitr)
 options(na.action='na.fail')
 opts_knit$set(root.dir = '..')
 opts_chunk$set(echo=FALSE,
-               warning=FALSE,
+               warning=TRUE,
                message=FALSE,
                fig.width=8,
                fig.height=8)
@@ -42,22 +42,16 @@ source('Scripts/GWAS_sims_CLEAN.R')
 
 ```{r Figure 1}
 
-# vline.dat <- ddply(h1,
-#                    .(Nids,Nsnps),
-#                    summarise,
-#                    med_h2 = median(H2))
-#   
-
-Fig1 <- ggplot(h1,aes(x = H2))+
+Fig1 <- ggplot(h1,aes(x = (H2)))+
           geom_density(fill = "orange",alpha = 0.4)+
-          # geom_vline(aes(xintercept = med_h2),data = vline.dat,col = "red")+
-          facet_grid(factor(Nids)~factor(Nsnps))+
-          geom_vline(aes(xintercept = 0.4),lty = 2)+
+          facet_grid(factor(Nids)~factor(Nsnps),scales = "free_y")+
+          geom_vline(aes(xintercept = (0.4)),lty = 2)+
           theme_bw()+
           xlab("Heritability estimates")+
           ylab("Density")
 
 Fig1
+
 
 ```
 **Figure 1** Density blah blah
@@ -130,8 +124,6 @@ Fig4 <- ggplot(q1,aes(x = Var))+
           ylab("Density")
 
 Fig4
-
-head(q1)
 
 ```
 

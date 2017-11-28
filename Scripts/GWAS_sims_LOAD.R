@@ -1,3 +1,7 @@
+###########################
+#GWAS SIMS - LOAD
+###########################
+
 
 # Load libraries ----------------------------------------------------------
 
@@ -5,6 +9,8 @@ library(ggplot2)
 library(plyr)
 library(magrittr)
 library(extRemes)
+library(lme4)
+library(arm)
 
 # Load data ---------------------------------------------------------------
 
