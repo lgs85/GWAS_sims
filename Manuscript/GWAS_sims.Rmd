@@ -115,15 +115,15 @@ Fig3
 
 ```{r Figure 4}
 
-Fig4 <- ggplot(q1,aes(x = Var))+
-          geom_density(fill = "orange",alpha = 0.4)+
-          # geom_vline(aes(xintercept = med_h2),data = vline.dat,col = "red")+
-          facet_grid(factor(Nids)~factor(Nsnps))+
-          theme_bw()+
-          xlab("Heritability estimates")+
-          ylab("Density")
 
-Fig4
+
+ggplot(q1,aes(x = Var,y = qtl2))+
+  geom_point(col = "orange")+
+  geom_abline(intercept = 0,slope = 1,lty = 2,size = 1)+
+  facet_grid(Nids~Nsnps)+
+  theme_bw()
+
+head(q1)
 
 ```
 
