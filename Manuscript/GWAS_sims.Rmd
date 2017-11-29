@@ -38,92 +38,100 @@ source('Scripts/GWAS_sims_CLEAN.R')
 #GWAS simulations - results
 
 
-###Heritability
+\pagebreak
+
+###GWAS - QTL effect sizes
 
 ```{r Figure 1}
 
-Fig1 <- ggplot(h1,aes(x = (H2)))+
-          geom_density(fill = "orange",alpha = 0.4)+
-          facet_grid(factor(Nids)~factor(Nsnps),scales = "free_y")+
-          geom_vline(aes(xintercept = (0.4)),lty = 2)+
-          theme_bw()+
-          xlab("Heritability estimates")+
-          ylab("Density")
+temp <- rbind(g1,g1,g1,g1)
+temp$Scenario <- rep(c(1:4),each = nrow(g1))
+
+Fig1 <-  subset(temp,(SNP.Name %in% paste0("Q",c(1:10)))) %>%
+         ddply(.(Nids,Nsnps,HistN,Full.Iteration.ID,Scenario),
+              summarise,
+              N_Sig_QTL = sum(Sig.Corrected == "yes")
+              ) %>%
+        ggplot(
+             aes(x = factor(Scenario), y = N_Sig_QTL,col = factor(Scenario))
+             )+
+            geom_jitter()+
+            ylim(c(0,10))+
+            geom_hline(aes(yintercept = 10),lty = 2)+
+            facet_grid(factor(Nids)~factor(Nsnps))+
+            theme_bw()
 
 Fig1
-
 
 ```
 **Figure 1** Density blah blah
 
 \pagebreak
 
-###GWAS - Number of QTL detected
+###GWAS - Non-QTL hits
 
 ```{r Figure 2}
+temp <- rbind(g1,g1,g1,g1)
+temp$Scenario <- rep(c(1:4),each = nrow(g1))
 
-Fig2 <- subset(g1,SNP.Name %in% paste0("Q",c(1:10))) %>%
-        ddply(
-              .(Nids,Nsnps,HistN,Full.Iteration.ID),
+Fig2 <-  subset(temp,!(SNP.Name %in% paste0("Q",c(1:10)))) %>%
+  ddply(.(Nids,Nsnps,HistN,Full.Iteration.ID,Scenario),
               summarise,
               N_Sig_QTL = sum(Sig.Corrected == "yes")
               ) %>%
         ggplot(
-             aes(x = N_Sig_QTL)
+             aes(x = factor(Scenario), y = N_Sig_QTL,col = factor(Scenario))
              )+
-            geom_density(fill = "orange",alpha = 0.4,adjust = 1.5)+
-            xlim(c(0,12))+
+            geom_jitter()+
             facet_grid(factor(Nids)~factor(Nsnps))+
-            geom_vline(aes(xintercept = 10),lty = 2)+
             theme_bw()
 
 Fig2
-
 
 ```
 **Figure 2** Density blah blah
 
 \pagebreak
 
-###GWAS - Non-QTL hits
+
+
+###Heritability
 
 ```{r Figure 3}
 
-Fig3 <-  subset(g1,!(SNP.Name %in% paste0("Q",c(1:10)))) %>%
-  ddply(.(Nids,Nsnps,HistN,Full.Iteration.ID),
-              summarise,
-              N_Sig_QTL = sum(Sig.Corrected == "yes")
-              ) %>%
-        ggplot(
-             aes(x = N_Sig_QTL)
-             )+
-            geom_density(fill = "orange",alpha = 0.4,adjust = 1.5)+
-            facet_grid(factor(Nids)~factor(Nsnps),scales = "free_y")+
-            theme_bw()
+temp <- rbind(h1,h1,h1,h1)
+temp$Scenario <- rep(c(1:4),each = nrow(h1))
+
+Fig3 <- ggplot(temp,aes(x = factor(Scenario), y = H2,col = factor(Scenario)))+
+          geom_jitter()+
+          facet_grid(factor(Nids)~factor(Nsnps))+
+          geom_hline(aes(yintercept = (0.4)),lty = 2)+
+          theme_bw()+
+          xlab("Scenario")+
+          ylab("Heritability")
 
 Fig3
 
+
 ```
 **Figure 3** Density blah blah
-
-\pagebreak
-
-
 
 
 ###Regional heritability
 
 ```{r Figure 4}
 
+Fig4 <- subset(q1, Merged == F) %>%
+        ggplot(
+             aes(x = Var, y= qtl2)
+             )+
+            geom_smooth(method = "lm")+
+            facet_grid(factor(Nids)~factor(Nsnps))+
+            geom_abline(aes(intercept = 0,slope = 1),lty = 2)+
+  geom_point()+
+            theme_bw()
 
-
-ggplot(q1,aes(x = Var,y = qtl2))+
-  geom_point(col = "orange")+
-  geom_abline(intercept = 0,slope = 1,lty = 2,size = 1)+
-  facet_grid(Nids~Nsnps)+
-  theme_bw()
-
-head(q1)
+Fig4
 
 ```
 
