@@ -138,3 +138,27 @@ Fig4
 
 ```
 
+
+
+
+```{r test}
+
+temp <- subset(g4,Nsnps == 5000)
+
+Fig2 <-  subset(temp,!(SNP.Name %in% paste0("Q",c(1:10)))) %>%
+  ddply(.(Nids,Nsnps,HistN,Ne,Full.Iteration.ID),
+              summarise,
+              N_Sig_QTL = sum(Sig.Corrected == "yes")
+              ) %>%
+        ggplot(
+             aes(x = factor(Nids), y = N_Sig_QTL,col = factor(Nids))
+             )+
+            geom_jitter()+
+            facet_grid(factor(HistN)~factor(Ne))+
+            theme_bw()
+
+Fig2
+
+
+```
+

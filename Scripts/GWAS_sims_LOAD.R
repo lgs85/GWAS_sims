@@ -20,7 +20,7 @@ h1 <- read.csv("Data/Scenario_1_parsed_results/Scenario_1_genomic_heritabilities
 
 #GWAS
 g1 <- read.csv("Data/Scenario_1_parsed_results/Scenario_1_GWAS_results.csv",stringsAsFactors = F)
-
+g4 <- read.csv("Data/Scenario_4_GWAS_results_Ne_test.csv")
 
 #QTL
 q1 <- read.csv("Data/Scenario_1_parsed_results/Scenario_1_qtl_effect_sizes.csv",stringsAsFactors = F)
