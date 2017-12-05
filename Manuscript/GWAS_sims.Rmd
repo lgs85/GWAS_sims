@@ -1,6 +1,6 @@
 ---
 output:
-  pdf_document:
+  bookdown::pdf_document2:
 header-includes: \usepackage{graphicx}
     \usepackage{setspace}
     \doublespacing
@@ -18,10 +18,11 @@ library(knitr)
 options(na.action='na.fail')
 opts_knit$set(root.dir = '..')
 opts_chunk$set(echo=FALSE,
-               warning=TRUE,
+               warning=FALSE,
                message=FALSE,
                fig.width=8,
-               fig.height=8)
+               fig.height=8,
+               fig.path = "../Figures/")
 
 ```
 
@@ -42,7 +43,9 @@ source('Scripts/GWAS_sims_CLEAN.R')
 
 ###GWAS - QTL effect sizes
 
-```{r Figure 1}
+test ref to at figure \@ref(fig:Fig_QTL_effects)
+
+```{r Fig_QTL_effects}
 
 temp <- rbind(g1,g1,g1,g1)
 temp$Scenario <- rep(c(1:4),each = nrow(g1))
@@ -64,7 +67,7 @@ Fig1 <-  subset(temp,(SNP.Name %in% paste0("Q",c(1:10)))) %>%
 Fig1
 
 ```
-**Figure 1** Density blah blah
+**Figure ** Density blah blah
 
 \pagebreak
 
