@@ -46,9 +46,12 @@ source('Scripts/GWAS_sims_CLEAN.R')
 test ref to at figure \@ref(fig:Fig_QTL_effects)
 
 ```{r Fig_QTL_effects}
+g4_2 <- g4[,colnames(g4) %in% colnames(g1)]
+g4_2$Nids <- g4_2$Nids*10
 
-temp <- rbind(g1,g1,g1,g1)
-temp$Scenario <- rep(c(1:4),each = nrow(g1))
+temp <- rbind(g1,g4_2)
+temp$Scenario <- rep(c(1,4),c(nrow(g1),nrow(g4_2)))
+
 
 Fig1 <-  subset(temp,(SNP.Name %in% paste0("Q",c(1:10)))) %>%
          ddply(.(Nids,Nsnps,HistN,Full.Iteration.ID,Scenario),
@@ -58,7 +61,7 @@ Fig1 <-  subset(temp,(SNP.Name %in% paste0("Q",c(1:10)))) %>%
         ggplot(
              aes(x = factor(Scenario), y = N_Sig_QTL,col = factor(Scenario))
              )+
-            geom_jitter()+
+            geom_boxplot()+
             ylim(c(0,10))+
             geom_hline(aes(yintercept = 10),lty = 2)+
             facet_grid(factor(Nids)~factor(Nsnps))+
@@ -74,8 +77,11 @@ Fig1
 ###GWAS - Non-QTL hits
 
 ```{r Figure 2}
-temp <- rbind(g1,g1,g1,g1)
-temp$Scenario <- rep(c(1:4),each = nrow(g1))
+g4_2 <- g4[,colnames(g4) %in% colnames(g1)]
+g4_2$Nids <- g4_2$Nids*10
+
+temp <- rbind(g1,g4_2)
+temp$Scenario <- rep(c(1,4),c(nrow(g1),nrow(g4_2)))
 
 Fig2 <-  subset(temp,!(SNP.Name %in% paste0("Q",c(1:10)))) %>%
   ddply(.(Nids,Nsnps,HistN,Full.Iteration.ID,Scenario),
@@ -85,7 +91,7 @@ Fig2 <-  subset(temp,!(SNP.Name %in% paste0("Q",c(1:10)))) %>%
         ggplot(
              aes(x = factor(Scenario), y = N_Sig_QTL,col = factor(Scenario))
              )+
-            geom_jitter()+
+            geom_boxplot()+
             facet_grid(factor(Nids)~factor(Nsnps))+
             theme_bw()
 
@@ -101,12 +107,17 @@ Fig2
 ###Heritability
 
 ```{r Figure 3}
+h4_2 <- h4[,colnames(h4) %in% colnames(h1)]
+h4_2$Nids <- h4_2$Nids*10
+# h4$Nsnps[h4$Nsnps > 200000] <- 200000
 
-temp <- rbind(h1,h1,h1,h1)
-temp$Scenario <- rep(c(1:4),each = nrow(h1))
+
+
+temp <- rbind(h1,h4_2)
+temp$Scenario <- rep(c(1,4),c(nrow(h1),nrow(h4_2)))
 
 Fig3 <- ggplot(temp,aes(x = factor(Scenario), y = H2,col = factor(Scenario)))+
-          geom_jitter()+
+          geom_boxplot()+
           facet_grid(factor(Nids)~factor(Nsnps))+
           geom_hline(aes(yintercept = (0.4)),lty = 2)+
           theme_bw()+
@@ -114,7 +125,6 @@ Fig3 <- ggplot(temp,aes(x = factor(Scenario), y = H2,col = factor(Scenario)))+
           ylab("Heritability")
 
 Fig3
-
 
 ```
 **Figure 3** Density blah blah
