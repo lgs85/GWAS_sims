@@ -97,6 +97,17 @@ Fig2 <-  subset(temp,!(SNP.Name %in% paste0("Q",c(1:10)))) %>%
 
 Fig2
 
+x <- subset(g4, Nids == 500) %>%
+  subset(Nsnps> 190000) %>%
+  subset(!duplicated(Full.Iteration.ID))
+
+ggplot(x,aes(x = BP, y = -log(Pexact)))+
+  facet_wrap(~Chromosome)+
+  geom_point()
+
+
+x <- read.csv("Data/Scenario_4/Scenario_4_reruns_Ne500.csv")
+head(x)
 ```
 **Figure 2** Density blah blah
 
@@ -133,42 +144,23 @@ Fig3
 ###Regional heritability
 
 ```{r Figure 4}
+q4_2 <- q4[,colnames(q4) %in% colnames(q1)]
+q4_2$Nids <- q4_2$Nids*10
 
-Fig4 <- subset(q1, Merged == F) %>%
+temp <- rbind(q1,q4_2)
+temp$Scenario <- rep(c(1,4),c(nrow(q1),nrow(q4_2)))
+
+
+
+Fig4 <- subset(temp, Merged == T) %>%
         ggplot(
-             aes(x = Var, y= qtl2)
-             )+
+             aes(x = Var, y= qtl2,col = factor(Scenario)))+
+            geom_point()+
             geom_smooth(method = "lm")+
             facet_grid(factor(Nids)~factor(Nsnps))+
             geom_abline(aes(intercept = 0,slope = 1),lty = 2)+
-  geom_point()+
             theme_bw()
 
 Fig4
 
 ```
-
-
-
-
-```{r test}
-
-temp <- subset(g4,Nsnps == 5000)
-
-Fig2 <-  subset(temp,!(SNP.Name %in% paste0("Q",c(1:10)))) %>%
-  ddply(.(Nids,Nsnps,HistN,Ne,Full.Iteration.ID),
-              summarise,
-              N_Sig_QTL = sum(Sig.Corrected == "yes")
-              ) %>%
-        ggplot(
-             aes(x = factor(Nids), y = N_Sig_QTL,col = factor(Nids))
-             )+
-            geom_jitter()+
-            facet_grid(factor(HistN)~factor(Ne))+
-            theme_bw()
-
-Fig2
-
-
-```
-
