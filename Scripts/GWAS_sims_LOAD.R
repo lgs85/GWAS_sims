@@ -11,6 +11,7 @@ library(magrittr)
 library(extRemes)
 library(lme4)
 library(arm)
+library(Rmisc)
 
 # Load data ---------------------------------------------------------------
 
