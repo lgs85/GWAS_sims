@@ -1,0 +1,143 @@
+---
+output: beamer_presentation
+header-includes: \usepackage{graphicx}
+---
+
+
+```{r setup, include = F}
+
+rm(list=ls())
+
+#Load knitr 
+library(knitr)
+
+#Set some options
+options(na.action='na.fail')
+opts_knit$set(root.dir = '..')
+opts_chunk$set(echo=FALSE,
+               warning=FALSE,
+               message=FALSE,
+               fig.width=8,
+               fig.height=8,
+               fig.path = "../Figures/")
+
+```
+
+```{r load and clean, include = F}
+
+#Load and clean data
+# source('Scripts/GWAS_sims_LOAD.R')
+# source('Scripts/GWAS_sims_FUNCTIONS.R')
+# source('Scripts/GWAS_sims_CLEAN.R')
+
+```
+
+
+
+## Genome-wide association studies in natural populations: managing expectations and avoiding error
+
+Susan E. Johnston & **Lewis G. Spurgin**
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{Images/manhattan.png}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.9\textwidth]{Images/logos.png}
+\end{center}
+
+
+
+
+
+
+##**G**enome **W**ide **A**ssociation **S**tudy (GWAS)
+
+Experimental design used to detect associations between genetic variants and traits in population samples
+
+
+
+
+
+
+
+----
+
+\begin{center}
+\includegraphics[width=1\textwidth]{Images/gwas_success.png}
+\end{center}
+
+\begin{flushright}
+\tiny{Visscher et al. 2017, AJHG}
+\end{flushright}
+
+
+
+
+
+----
+
+\begin{center}
+\includegraphics[width=1\textwidth]{Images/traits.png}
+\end{center}
+
+
+
+
+
+
+
+##GWAS in natural populations
+
+Example studies (finches, peppered moths etc)
+
+
+
+
+
+
+##Key factors to consider in GWAS
+
+- Architecture of the trait
+- Number of individuals sampled
+- Number of genetic markers sampled
+- Extent of linkage disequilibrium between sampled markers and causal variants
+
+
+
+
+
+
+##Key factors to consider in GWAS
+
+- Architecture of the trait
+- Number of individuals sampled
+- Number of genetic markers sampled
+- **Extent of linkage disequilibrium between sampled markers and causal variants**
+
+
+
+
+
+
+##Linkage disequilibrium (LD) and GWAS
+
+Why LD is important for GWAS
+
+
+
+
+##Linkage disequilibrium (LD) and GWAS
+
+Factors affecting LD
+
+
+
+
+##Linkage disequilibrium (LD) and GWAS
+
+LD in natural populations

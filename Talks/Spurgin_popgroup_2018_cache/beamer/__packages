@@ -1,0 +1,15 @@
+base
+knitr
+ggplot2
+plyr
+magrittr
+Lmoments
+distillery
+car
+extRemes
+Matrix
+lme4
+MASS
+arm
+lattice
+Rmisc

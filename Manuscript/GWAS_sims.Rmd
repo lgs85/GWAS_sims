@@ -196,17 +196,63 @@ FigC <- ggplot(h1,aes(x = factor(Nids), y = H2,col = factor(Nsnps)))+
           xlab("Scenario")+
           ylab("Heritability")
 
-FigD <- subset(temp, Merged == F) %>%
+FigD <- subset(q1, Merged == T) %>%
         ggplot(
-             aes(x = Var, y= qtl2,col = factor(Nsnps)))+
-            geom_point()+
-            geom_smooth(method = "lm")+
+             aes(x = Var, y= qtl2,col = factor(Nids)))+
+            geom_smooth()+
             geom_abline(aes(intercept = 0,slope = 1),lty = 2)+
             theme_bw()
 
 
-multiplot(FigA,FigB,FigC)
+multiplot(FigA,FigB,FigC,FigD,layout = matrix(1:4,2,2))
 ```
+
+
+
+
+```{r Scenario_2}
+FigA <- subset(g2,(SNP.Name %in% paste0("Q",c(1:10)))) %>%
+         ddply(.(Nids,Nsnps,HistN,Full.Iteration.ID),
+              summarise,
+              N_Sig_QTL = sum(Sig.Corrected == "yes")
+              ) %>%
+        ggplot(
+             aes(x = factor(Nids), y = N_Sig_QTL,col = factor(Nsnps))
+             )+
+         geom_boxplot()+
+            ylim(c(0,10))+
+            geom_hline(aes(yintercept = 10),lty = 2)+
+            theme_bw()
+FigB <- subset(g2,!(SNP.Name %in% paste0("Q",c(1:10)))) %>%
+         ddply(.(Nids,Nsnps,HistN,Full.Iteration.ID),
+              summarise,
+              N_Sig_QTL = sum(Sig.Corrected == "yes")
+              ) %>%
+        ggplot(
+             aes(x = factor(Nids), y = N_Sig_QTL,col = factor(Nsnps))
+             )+
+         geom_boxplot()+
+            ylim(c(0,10))+
+            geom_hline(aes(yintercept = 10),lty = 2)+
+            theme_bw()
+FigC <- ggplot(h2,aes(x = factor(Nids), y = H2,col = factor(Nsnps)))+
+          geom_boxplot()+
+          geom_hline(aes(yintercept = (0.4)),lty = 2)+
+          theme_bw()+
+          xlab("Scenario")+
+          ylab("Heritability")
+
+FigD <- subset(q2, Merged == T) %>%
+        ggplot(
+             aes(x = Var, y= qtl2,col = factor(Nids)))+
+            geom_smooth()+
+            geom_abline(aes(intercept = 0,slope = 1),lty = 2)+
+            theme_bw()
+
+
+multiplot(FigA,FigB,FigC,FigD,layout = matrix(1:4,2,2))
+```
+
 
 ```{r Scenario_4}
 FigA <- subset(g4,(SNP.Name %in% paste0("Q",c(1:10)))) %>%
@@ -237,7 +283,13 @@ FigC <- ggplot(h4,aes(x = factor(Nids), y = H2,col = factor(Nsnps)))+
           theme_bw()+
           xlab("Scenario")+
           ylab("Heritability")
+FigD <- subset(q4, Merged == T) %>%
+        ggplot(
+             aes(x = Var, y= qtl2,col = factor(Nids)))+
+            geom_smooth()+
+            geom_abline(aes(intercept = 0,slope = 1),lty = 2)+
+            theme_bw()
 
 
-multiplot(FigA,FigB,FigC)
+multiplot(FigA,FigB,FigC,FigD,layout = matrix(1:4,2,2))
 ```
