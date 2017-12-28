@@ -36,7 +36,7 @@ opts_chunk$set(echo=FALSE,
 
 ## Genome-wide association studies in natural populations: managing expectations and avoiding error
 
-Susan E. Johnston & **Lewis G. Spurgin**
+Susan E. Johnston & Lewis G. Spurgin
 
 \vspace{0.3cm}
 
@@ -90,10 +90,7 @@ Experimental design used to detect associations between genetic variants and tra
 
 
 
-
-##GWAS in natural populations
-
-Example studies (finches, peppered moths etc)
+#Key factors to consider in GWAS
 
 
 
@@ -101,6 +98,16 @@ Example studies (finches, peppered moths etc)
 
 
 ##Key factors to consider in GWAS
+- Have I missed any variants associated with my trait? (**False negatives**) 
+- Have I identified any spurious associations with my trait? (**False positives**)
+
+
+
+
+
+##Key factors to consider in GWAS
+
+**Factors affecting false positive and false negative rates**
 
 - Architecture of the trait
 - Number of individuals sampled
@@ -114,6 +121,8 @@ Example studies (finches, peppered moths etc)
 
 ##Key factors to consider in GWAS
 
+**Factors affecting false positive and false negative rates**
+
 - Architecture of the trait
 - Number of individuals sampled
 - Number of genetic markers sampled
@@ -126,18 +135,93 @@ Example studies (finches, peppered moths etc)
 
 ##Linkage disequilibrium (LD) and GWAS
 
-Why LD is important for GWAS
+\begin{center}
+\includegraphics[width=1\textwidth]{Images/ld.png}
+\end{center}
+
+\vspace{0.4cm}
+
+\begin{flushright}
+\tiny{Bush and Moore 2012, PLoS Comput. Biol.}
+\end{flushright}
 
 
 
 
 ##Linkage disequilibrium (LD) and GWAS
 
-Factors affecting LD
+\begin{center}
+\includegraphics[width=0.6\textwidth]{Images/indirect_association.png}
+\end{center}
+
+\vspace{0.4cm}
+
+\begin{flushright}
+\tiny{Bush and Moore 2012, PLoS Comput. Biol.}
+\end{flushright}
+
+
 
 
 
 
 ##Linkage disequilibrium (LD) and GWAS
 
-LD in natural populations
+Present day patterns of LD in a population are the product of:
+
+1. Historical evolutionary processes (e.g. recombination rate, demography, selection etc. - **Ancestral LD**)
+2. Nature of the population sample (e.g. family structure, substructure, sample size - **Sample LD**)
+
+**Both ancestral LD and sample LD will vary widely across studies of natural populations**
+
+
+
+
+##Linkage disequilibrium (LD) and GWAS
+
+\begin{center}
+\includegraphics[width=1\textwidth]{Images/ld_birds.png}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{flushright}
+\tiny{Bosse et al. 2017, Science; Knief et al. 2017, Mol. Ecol.}
+\end{flushright}
+
+
+
+
+
+##GWAS in natural populations
+
+- The power GWAS will vary enormously across natural populations and species with different evolutionary histories
+- Sample size (number of individuals/markers) will therefore need to be adjusted accordingly
+- This should be considered **before** undertaking sampling and  genotyping
+
+
+
+
+
+#GWAS in natural populations: a simulation approach
+
+
+
+##Study aims
+
+Develop a simulation and analysis pipeline to:
+
+- Illustrate some of the key issues affecting the power and promise of GWAS in natural populations
+- Allow other researchers to estimate power in their system before undertaking costly fieldwork/genotyping
+
+
+
+
+
+##Simulation approach
+
+
+
+
+
+
