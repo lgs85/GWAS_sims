@@ -17,8 +17,8 @@ opts_knit$set(root.dir = '..')
 opts_chunk$set(echo=FALSE,
                warning=FALSE,
                message=FALSE,
-               fig.width=8,
-               fig.height=8,
+               fig.width=5,
+               fig.height=3,
                fig.path = "../Figures/")
 
 ```
@@ -26,9 +26,9 @@ opts_chunk$set(echo=FALSE,
 ```{r load and clean, include = F}
 
 #Load and clean data
-# source('Scripts/GWAS_sims_LOAD.R')
-# source('Scripts/GWAS_sims_FUNCTIONS.R')
-# source('Scripts/GWAS_sims_CLEAN.R')
+source('Scripts/GWAS_sims_LOAD.R')
+source('Scripts/GWAS_sims_FUNCTIONS.R')
+source('Scripts/GWAS_sims_CLEAN.R')
 
 ```
 
@@ -220,8 +220,99 @@ Develop a simulation and analysis pipeline to:
 
 ##Simulation approach
 
+- We simulated quantitative traits under three **scenarios**, representing diverse natural systems with different population histories
+- We **did not** perform exhaustive simulations to establish whih parameters most affect GWAS
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{Images/scenarios.png}
+\end{center}
 
 
 
 
 
+##Simulation approach
+
+Used the software **QMSim** (Sargolzaei and Schenkel 2009, Bioinformatics), to:
+
+1. Simulate historical population to establish **ancestral LD**
+2. Simulate recent pedigrees to generate **sample LD**
+
+
+
+##Simulation approach
+
+Sample size:
+
+- Five sample sizes tested (250,500,1000,2500,5000)
+- Five marker panel sizes tested (5k,20k,50k,100k,200k)
+- 100 replicates per simulation
+
+
+
+##Simulation approach
+
+Trait architecture:
+
+- 10 QTL on 10 chromosomes (1 QTL per chromosome)
+- Gamma distribution of QTL effect sizes
+- Heritability of 0.4
+- No selection
+- Kept constant in all simulations
+
+
+
+##Downstream analyses
+
+Used GCTA to:
+
+- Identify significant GWAS hits
+- Estimate QTL effect sizes
+- Estimate trait heritability (should be 0.4 in all simulations)
+
+
+
+#Results
+
+##Scenario 1
+
+- Large, outbred population (historical $N_e$ = 20k)
+- No family structure (i.e. no pedigree simulations)
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.3\textwidth]{Images/herring.png}
+\end{center}
+
+
+
+##Scenario 1
+
+```{r s1_gwas_qtl_empty}
+
+s1_gwas_qtl <- subset(g1, (SNP.Name %in% paste0("Q", c(1:10)))) %>%
+  ddply(
+    .(Nids, Nsnps, HistN, Full.Iteration.ID),
+    summarise,
+    N_Sig_QTL = sum(Sig.Corrected == "yes")
+  ) %>%
+  ggplot(aes(
+    x = factor(Nids),
+    y = N_Sig_QTL,
+    fill = factor(Nsnps)
+  )) +
+  ylim(c(0, 12)) +
+  geom_hline(aes(yintercept = 10), lty = 2) +
+  theme_bw()+
+  geom_boxplot()+
+  ylab("Number of significant QTL")+
+    xlab("Number individuals sampled")+
+    labs(fill='Number SNPs sampled')+
+  scale_fill_brewer(palette = "Blues")
+
+s1_gwas_qtl
+
+```
+
+``
