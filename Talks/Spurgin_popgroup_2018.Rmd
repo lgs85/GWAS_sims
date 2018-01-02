@@ -55,13 +55,22 @@ Susan E. Johnston & Lewis G. Spurgin
 
 
 
+----
+
+\begin{center}
+\includegraphics[width=1\textwidth]{Images/traits.png}
+\end{center}
+
+
+
+
+
+
+
+
 ##**G**enome **W**ide **A**ssociation **S**tudy (GWAS)
 
 Experimental design used to detect associations between genetic variants and traits in population samples
-
-
-
-
 
 
 
@@ -78,11 +87,40 @@ Experimental design used to detect associations between genetic variants and tra
 
 
 
+----
+
+\begin{center}
+\includegraphics[width=1\textwidth]{Images/wild_gwas.png}
+\end{center}
+
+\begin{flushright}
+\tiny{Slate et al. 2010, Trends Gen.}
+\end{flushright}
+
+
+
 
 ----
 
 \begin{center}
-\includegraphics[width=1\textwidth]{Images/traits.png}
+\includegraphics[width=1\textwidth]{Images/mol_ecologist.png}
+\end{center}
+
+
+
+
+----
+
+\begin{center}
+\includegraphics[width=1\textwidth]{Images/genomics_flow1.png}
+\end{center}
+
+
+
+----
+
+\begin{center}
+\includegraphics[width=1\textwidth]{Images/genomics_flow2.png}
 \end{center}
 
 
@@ -90,16 +128,15 @@ Experimental design used to detect associations between genetic variants and tra
 
 
 
-#Key factors to consider in GWAS
 
 
+##Study aims
 
+Develop a simulation and analysis pipeline to:
 
+- Illustrate some of the key issues affecting the power and promise of GWAS in natural populations
+- Allow other researchers to estimate power in their system before undertaking costly fieldwork/genotyping
 
-
-##Key factors to consider in GWAS
-- Have I missed any variants associated with my trait? (**False negatives**) 
-- Have I identified any spurious associations with my trait? (**False positives**)
 
 
 
@@ -115,64 +152,6 @@ Experimental design used to detect associations between genetic variants and tra
 - Extent of linkage disequilibrium between sampled markers and causal variants
 
 
-
-
-
-
-##Key factors to consider in GWAS
-
-**Factors affecting false positive and false negative rates**
-
-- Architecture of the trait
-- Number of individuals sampled
-- Number of genetic markers sampled
-- **Extent of linkage disequilibrium between sampled markers and causal variants**
-
-
-
-
-
-
-##Linkage disequilibrium (LD) and GWAS
-
-\begin{center}
-\includegraphics[width=1\textwidth]{Images/ld.png}
-\end{center}
-
-\vspace{0.4cm}
-
-\begin{flushright}
-\tiny{Bush and Moore 2012, PLoS Comput. Biol.}
-\end{flushright}
-
-
-
-
-##Linkage disequilibrium (LD) and GWAS
-
-\begin{center}
-\includegraphics[width=0.6\textwidth]{Images/indirect_association.png}
-\end{center}
-
-\vspace{0.4cm}
-
-\begin{flushright}
-\tiny{Bush and Moore 2012, PLoS Comput. Biol.}
-\end{flushright}
-
-
-
-
-
-
-##Linkage disequilibrium (LD) and GWAS
-
-Present day patterns of LD in a population are the product of:
-
-1. Historical evolutionary processes (e.g. recombination rate, demography, selection etc. - **Ancestral LD**)
-2. Nature of the population sample (e.g. family structure, substructure, sample size - **Sample LD**)
-
-**Both ancestral LD and sample LD will vary widely across studies of natural populations**
 
 
 
@@ -203,16 +182,7 @@ Present day patterns of LD in a population are the product of:
 
 
 
-#GWAS in natural populations: a simulation approach
 
-
-
-##Study aims
-
-Develop a simulation and analysis pipeline to:
-
-- Illustrate some of the key issues affecting the power and promise of GWAS in natural populations
-- Allow other researchers to estimate power in their system before undertaking costly fieldwork/genotyping
 
 
 
@@ -581,6 +551,12 @@ Fig2
 ##Overall conclusions
 
 
+
+#Thankyou!
+
+#Thankyou!
+
+#Thankyou!
 
 #Thankyou!
 
