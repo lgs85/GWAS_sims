@@ -64,7 +64,12 @@ Susan E. Johnston & Lewis G. Spurgin
 
 
 
+##Linking genotype and phenotype in the wild
 
+- How heritable is my trait?
+- How many loci are associated with my trait?
+- What are their relative effect sizes?
+- What evolutionary processes are driving their variation?
 
 
 
@@ -99,31 +104,14 @@ Experimental design used to detect associations between genetic variants and tra
 
 
 
+##Linking genotype and phenotype in the wild
 
-----
+- How heritable is my trait?
+- How many loci are associated with my trait?
+- What are their relative effect sizes?
+- What evolutionary processes are driving their variation?
 
-\begin{center}
-\includegraphics[width=1\textwidth]{Images/mol_ecologist.png}
-\end{center}
-
-
-
-
-----
-
-\begin{center}
-\includegraphics[width=1\textwidth]{Images/genomics_flow1.png}
-\end{center}
-
-
-
-----
-
-\begin{center}
-\includegraphics[width=1\textwidth]{Images/genomics_flow2.png}
-\end{center}
-
-
+**How many (and which) individuals do I need to sample? How many loci?**
 
 
 
@@ -144,12 +132,12 @@ Develop a simulation and analysis pipeline to:
 
 ##Key factors to consider in GWAS
 
-**Factors affecting false positive and false negative rates**
+**How many (and which) individuals do I need to sample? How many loci?**
+
+Two (of several) key factors to consider:
 
 - Architecture of the trait
-- Number of individuals sampled
-- Number of genetic markers sampled
-- Extent of linkage disequilibrium between sampled markers and causal variants
+- Extent of linkage disequilibrium (LD) in the study population
 
 
 
@@ -172,11 +160,12 @@ Develop a simulation and analysis pipeline to:
 
 
 
-##GWAS in natural populations
+##Study predictions
 
-- The power GWAS will vary enormously across natural populations and species with different evolutionary histories
-- Sample size (number of individuals/markers) will therefore need to be adjusted accordingly
-- This should be considered **before** undertaking sampling and  genotyping
+In simulated populations with different evolutionary histories and family structures:
+
+- 
+
 
 
 
