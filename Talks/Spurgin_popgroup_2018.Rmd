@@ -95,27 +95,34 @@ Experimental design used to detect associations between genetic variants and tra
 ----
 
 \begin{center}
-\includegraphics[width=1\textwidth]{Images/wild_gwas.png}
+\includegraphics[width=1\textwidth]{Images/gwas_success_wild.png}
 \end{center}
 
 \begin{flushright}
-\tiny{Slate et al. 2010, Trends Gen.}
+\tiny{Barson et al. 2015 Nature, Cadieu et al. 2009 Science}
 \end{flushright}
 
 
 
 ##Linking genotype and phenotype in the wild
 
-- How heritable is my trait?
-- How many loci are associated with my trait?
-- What are their relative effect sizes?
-- What evolutionary processes are driving their variation?
-
-**How many (and which) individuals do I need to sample? How many loci?**
+\begin{center}
+\includegraphics[width=0.8\textwidth]{Images/mrmen.png}
+\end{center}
 
 
+##Linking genotype and phenotype in the wild
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{Images/boromir.png}
+\end{center}
 
 
+
+##Linking genotype and phenotype in the wild
+
+- Have I got the power to detect true associations?
+- Am I likely to suffer from false positive associations?
 
 
 ##Study aims
@@ -132,15 +139,27 @@ Develop a simulation and analysis pipeline to:
 
 ##Key factors to consider in GWAS
 
-**How many (and which) individuals do I need to sample? How many loci?**
-
-Two (of several) key factors to consider:
-
 - Architecture of the trait
 - Extent of linkage disequilibrium (LD) in the study population
+- Number of individuals sampled
+- Number of markers sampled
+- Analysis used
 
 
+##Linkage disequilibrium (LD) and GWAS
 
+- Causal mutations probably not typed in GWAS
+- We rely on indirect associations with typed SNPs in LD
+
+\begin{center}
+\includegraphics[width=1\textwidth]{Images/indirect_association.png}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{flushright}
+\tiny{Hirschorn and Daly 2005, Nat. Rev. Gen.}
+\end{flushright}
 
 
 
@@ -164,49 +183,32 @@ Two (of several) key factors to consider:
 
 In simulated populations with different evolutionary histories and family structures:
 
-- 
-
-
-
-
-
-
-
-
-
+- Accuracy of heritability estimates and GWAS will improve with increasing sample size (individuals and markers)
+- But benefits of increased sampling will vary across scenarios
 
 
 
 ##Simulation approach
 
-- We simulated quantitative traits under three **scenarios**, representing diverse natural systems with different population histories
-- We **did not** perform exhaustive simulations to establish whih parameters most affect GWAS
-
 \begin{center}
-\includegraphics[width=0.8\textwidth]{Images/scenarios.png}
+\includegraphics[width=1\textwidth]{Images/simulation_flow.png}
 \end{center}
 
 
 
 
-
 ##Simulation approach
 
-Used the software **QMSim** (Sargolzaei and Schenkel 2009, Bioinformatics), to:
+Historical populations and pedigree simulations carried out using QMSim
 
-1. Simulate historical population to establish **ancestral LD**
-2. Simulate recent pedigrees to generate **sample LD**
+- Three scenarios, representing diverse natural systems with different population histories
+  - **Scenario 1**: Large population ($N_e$ = 25,0000), no family structure
+  - **Scenario 2**: Large population ($N_e$ = 25,0000), family structure
+  - **Scenario 3**: Small population ($N_e$ = 500), family structure
 
-
-
-##Simulation approach
-
-Sample size:
-
-- Five sample sizes tested (250,500,1000,2500,5000)
-- Five marker panel sizes tested (5k,20k,50k,100k,200k)
-- 100 replicates per simulation
-
+\begin{center}
+\includegraphics[width=0.8\textwidth]{Images/scenarios.png}
+\end{center}
 
 
 ##Simulation approach
@@ -220,56 +222,11 @@ Trait architecture:
 - Kept constant in all simulations
 
 
+##Simulation approach
 
-##Downstream analyses
-
-Used GCTA to:
-
-- Identify significant GWAS hits
-- Estimate QTL effect sizes
-- Estimate trait heritability (should be 0.4 in all simulations)
-
-
-
-
-
-##Scenario 1
-
-- Large, outbred population (historical $N_e$ = 20k)
-- No family structure (i.e. no pedigree simulations)
-
-\vspace{0.3cm}
-
-\begin{center}
-\includegraphics[width=0.3\textwidth]{Images/herring.png}
-\end{center}
-
-
-
-##Scenario 2
-
-- Large, outbred population (historical $N_e$ = 20k)
-- Family structure
-
-\vspace{0.3cm}
-
-\begin{center}
-\includegraphics[width=0.3\textwidth]{Images/greattit.png}
-\end{center}
-
-
-
-
-##Scenario 3
-
-- Small, inbred population (historical $N_e$ = 500)
-- Family structure
-
-\vspace{0.3cm}
-
-\begin{center}
-\includegraphics[width=0.3\textwidth]{Images/seychelleswarb.png}
-\end{center}
+- 3 Scenarios x 5 sample sizes x 5 marker panel sizes x 100 replicates = **7500 datasets**
+- Estimated heritability and performed GWAS on all datasets using GCTA
+- Whole pipeline will be available to download (probably as an R package)
 
 
 
@@ -288,6 +245,9 @@ g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
 
 temp <- rbind(g1,g2_2,g4_2)
 temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(g1),nrow(g2_2),nrow(g4_2))))
+temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
+                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
+                                "Small pop, FS"))
 
 temp$Nids2 <- paste("N =",temp$Nids)
 temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
@@ -297,7 +257,7 @@ temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique
 
 Fig2 <-  subset(temp, (SNP.Name %in% paste0("Q", c(1:10)))) %>%
   ddply(
-  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario),
+  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
   summarise,
   N_Sig_QTL = sum(Sig.Corrected == "yes")
   ) %>%
@@ -305,7 +265,7 @@ Fig2 <-  subset(temp, (SNP.Name %in% paste0("Q", c(1:10)))) %>%
   geom_jitter(aes(shape = NA)) +
     geom_hline(yintercept = 10,lty = 2)+
   ylim(c(0,12))+
-  facet_grid(Nsnps2 ~ Scenario) +
+  facet_grid(Nsnps2 ~ Scenario2) +
   theme_bw() +
   theme(legend.position = "none",
   axis.text.x = element_text(angle = 90)) +
@@ -328,7 +288,9 @@ g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
 
 temp <- rbind(g1,g2_2,g4_2)
 temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(g1),nrow(g2_2),nrow(g4_2))))
-
+temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
+                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
+                                "Small pop, FS"))
 temp$Nids2 <- paste("N =",temp$Nids)
 temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
 
@@ -337,7 +299,7 @@ temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique
 
 Fig2 <-  subset(temp, (SNP.Name %in% paste0("Q", c(1:10)))) %>%
   ddply(
-  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario),
+  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
   summarise,
   N_Sig_QTL = sum(Sig.Corrected == "yes")
   ) %>%
@@ -345,7 +307,7 @@ Fig2 <-  subset(temp, (SNP.Name %in% paste0("Q", c(1:10)))) %>%
   geom_jitter() +
     geom_hline(yintercept = 10,lty = 2)+
   ylim(c(0,12))+
-  facet_grid(Nsnps2 ~ Scenario) +
+  facet_grid(Nsnps2 ~ Scenario2) +
   theme_bw() +
   theme(legend.position = "none",
   axis.text.x = element_text(angle = 90)) +
@@ -367,7 +329,9 @@ g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
 
 temp <- rbind(g1,g2_2,g4_2)
 temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(g1),nrow(g2_2),nrow(g4_2))))
-
+temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
+                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
+                                "Small pop, FS"))
 temp$Nids2 <- paste("N =",temp$Nids)
 temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
 
@@ -376,14 +340,14 @@ temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique
 
 Fig2 <-  subset(temp, !(SNP.Name %in% paste0("Q", c(1:10)))) %>%
   ddply(
-  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario),
+  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
   summarise,
   N_Sig_QTL = sum(Sig.Corrected == "yes")
   ) %>%
   ggplot(aes(x = Nids2, y = N_Sig_QTL, col = Nids2)) +
   geom_jitter(aes(shape = NA)) +
     geom_hline(yintercept = 10,lty = 2)+
-  facet_grid(Nsnps2 ~ Scenario) +
+  facet_grid(Nsnps2 ~ Scenario2) +
   theme_bw() +
   theme(legend.position = "none",
   axis.text.x = element_text(angle = 90)) +
@@ -404,6 +368,9 @@ g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
 
 temp <- rbind(g1,g2_2,g4_2)
 temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(g1),nrow(g2_2),nrow(g4_2))))
+temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
+                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
+                                "Small pop, FS"))
 
 temp$Nids2 <- paste("N =",temp$Nids)
 temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
@@ -413,14 +380,14 @@ temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique
 
 Fig2 <-  subset(temp, !(SNP.Name %in% paste0("Q", c(1:10)))) %>%
   ddply(
-  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario),
+  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
   summarise,
   N_Sig_QTL = sum(Sig.Corrected == "yes")
   ) %>%
   ggplot(aes(x = Nids2, y = N_Sig_QTL, col = Nids2)) +
   geom_jitter() +
     geom_hline(yintercept = 10,lty = 2)+
-  facet_grid(Nsnps2 ~ Scenario) +
+  facet_grid(Nsnps2 ~ Scenario2) +
   theme_bw() +
   theme(legend.position = "none",
   axis.text.x = element_text(angle = 90)) +
@@ -440,7 +407,9 @@ g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
 
 temp <- rbind(g1,g2_2)
 temp$Scenario <- paste("Scenario",rep(c(1,2),c(nrow(g1),nrow(g2_2))))
-
+temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
+                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
+                                "Small pop, FS"))
 temp$Nids2 <- paste("N =",temp$Nids)
 temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
 
@@ -449,14 +418,14 @@ temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique
 
 Fig2 <-  subset(temp, !(SNP.Name %in% paste0("Q", c(1:10)))) %>%
   ddply(
-  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario),
+  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
   summarise,
   N_Sig_QTL = sum(Sig.Corrected == "yes")
   ) %>%
   ggplot(aes(x = Nids2, y = N_Sig_QTL, col = Nids2)) +
   geom_jitter() +
     geom_hline(yintercept = 10,lty = 2)+
-  facet_grid(Nsnps2 ~ Scenario) +
+  facet_grid(Nsnps2 ~ Scenario2) +
   theme_bw() +
   theme(legend.position = "none",
   axis.text.x = element_text(angle = 90)) +
@@ -478,7 +447,9 @@ h2_2 <- h2[,colnames(h2) %in% colnames(h1)]
 
 temp <- rbind(h1,h2_2,h4_2)
 temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(h1),nrow(h2_2),nrow(h4_2))))
-
+temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
+                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
+                                "Small pop, FS"))
 temp$Nids2 <- paste("N =",temp$Nids)
 temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
 
@@ -489,7 +460,7 @@ Fig2 <-
   ggplot(temp,aes(x = Nids2, y = H2, col = Nids2)) +
   geom_jitter(aes(shape = NA)) +
   geom_hline(yintercept = 0.4,lty = 2)+
-  facet_grid(Nsnps2 ~ Scenario) +
+  facet_grid(Nsnps2 ~ Scenario2) +
   theme_bw() +
   theme(legend.position = "none",
   axis.text.x = element_text(angle = 90)) +
@@ -514,7 +485,9 @@ h2_2 <- h2[,colnames(h2) %in% colnames(h1)]
 
 temp <- rbind(h1,h2_2,h4_2)
 temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(h1),nrow(h2_2),nrow(h4_2))))
-
+temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
+                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
+                                "Small pop, FS"))
 temp$Nids2 <- paste("N =",temp$Nids)
 temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
 
@@ -525,7 +498,7 @@ Fig2 <-
   ggplot(temp,aes(x = Nids2, y = H2, col = Nids2)) +
   geom_jitter() +
   geom_hline(yintercept = 0.4,lty = 2)+
-  facet_grid(Nsnps2 ~ Scenario) +
+  facet_grid(Nsnps2 ~ Scenario2) +
   theme_bw() +
   theme(legend.position = "none",
   axis.text.x = element_text(angle = 90)) +
@@ -539,7 +512,10 @@ Fig2
 
 ##Overall conclusions
 
-
+- Power and promise of GWAS depends on sample size, but also on evolutionary history
+- This should be explored before undertaking sampling and analysis, not after
+- We have developed a flexible framework for simulating and analysing quantitative trait data
+- Come and talk to us if you want to know more!
 
 #Thankyou!
 
