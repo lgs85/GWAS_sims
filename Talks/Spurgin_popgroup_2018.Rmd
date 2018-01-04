@@ -36,7 +36,7 @@ source('Scripts/GWAS_sims_CLEAN.R')
 
 ## Genome-wide association studies in natural populations: managing expectations and avoiding error
 
-Susan E. Johnston & Lewis G. Spurgin
+Lewis G. Spurgin & Susan E. Johnston
 
 \vspace{0.3cm}
 
@@ -82,12 +82,10 @@ Experimental design used to detect associations between genetic variants and tra
 ----
 
 \begin{center}
-\includegraphics[width=1\textwidth]{Images/gwas_success.png}
+\includegraphics[width=0.8\textwidth]{Images/poll.png}
 \end{center}
 
-\begin{flushright}
-\tiny{Visscher et al. 2017, AJHG}
-\end{flushright}
+
 
 
 
@@ -103,12 +101,6 @@ Experimental design used to detect associations between genetic variants and tra
 \end{flushright}
 
 
-
-##Linking genotype and phenotype in the wild
-
-\begin{center}
-\includegraphics[width=0.8\textwidth]{Images/mrmen.png}
-\end{center}
 
 
 ##Linking genotype and phenotype in the wild
@@ -234,207 +226,6 @@ Trait architecture:
 #Results
 
 
-##Number of significant GWAS QTL
-
-
-```{r gwas_qtl,fig.height = 7,fig.width = 7,fig.align = "center"}
-
-g4_2 <- g4[,colnames(g4) %in% colnames(g1)]
-g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
-
-
-temp <- rbind(g1,g2_2,g4_2)
-temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(g1),nrow(g2_2),nrow(g4_2))))
-temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
-                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
-                                "Small pop, FS"))
-
-temp$Nids2 <- paste("N =",temp$Nids)
-temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
-
-temp$Nsnps2 <- paste(temp$Nsnps,"SNPs")
-temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique(temp$Nsnps))],"SNPs"))
-
-Fig2 <-  subset(temp, (SNP.Name %in% paste0("Q", c(1:10)))) %>%
-  ddply(
-  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
-  summarise,
-  N_Sig_QTL = sum(Sig.Corrected == "yes")
-  ) %>%
-  ggplot(aes(x = Nids2, y = N_Sig_QTL, col = Nids2)) +
-  geom_jitter(aes(shape = NA)) +
-    geom_hline(yintercept = 10,lty = 2)+
-  ylim(c(0,12))+
-  facet_grid(Nsnps2 ~ Scenario2) +
-  theme_bw() +
-  theme(legend.position = "none",
-  axis.text.x = element_text(angle = 90)) +
-  ylab("Number of GWAS hits") +
-  xlab("")
-
-Fig2
-
-```
-
-
-##Number of significant GWAS QTL
-
-
-```{r gwas_qtl_2,fig.height = 7,fig.width = 7,fig.align = "center"}
-
-g4_2 <- g4[,colnames(g4) %in% colnames(g1)]
-g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
-
-
-temp <- rbind(g1,g2_2,g4_2)
-temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(g1),nrow(g2_2),nrow(g4_2))))
-temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
-                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
-                                "Small pop, FS"))
-temp$Nids2 <- paste("N =",temp$Nids)
-temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
-
-temp$Nsnps2 <- paste(temp$Nsnps,"SNPs")
-temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique(temp$Nsnps))],"SNPs"))
-
-Fig2 <-  subset(temp, (SNP.Name %in% paste0("Q", c(1:10)))) %>%
-  ddply(
-  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
-  summarise,
-  N_Sig_QTL = sum(Sig.Corrected == "yes")
-  ) %>%
-  ggplot(aes(x = Nids2, y = N_Sig_QTL, col = Nids2)) +
-  geom_jitter() +
-    geom_hline(yintercept = 10,lty = 2)+
-  ylim(c(0,12))+
-  facet_grid(Nsnps2 ~ Scenario2) +
-  theme_bw() +
-  theme(legend.position = "none",
-  axis.text.x = element_text(angle = 90)) +
-  ylab("Number of GWAS hits") +
-  xlab("")
-
-Fig2
-
-```
-
-
-##Number of significant GWAS hits (non-QTL)
-
-
-```{r gwas_nonqtl,fig.width = 7,fig.height = 7,fig.align = "center"}
-g4_2 <- g4[,colnames(g4) %in% colnames(g1)]
-g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
-
-
-temp <- rbind(g1,g2_2,g4_2)
-temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(g1),nrow(g2_2),nrow(g4_2))))
-temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
-                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
-                                "Small pop, FS"))
-temp$Nids2 <- paste("N =",temp$Nids)
-temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
-
-temp$Nsnps2 <- paste(temp$Nsnps,"SNPs")
-temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique(temp$Nsnps))],"SNPs"))
-
-Fig2 <-  subset(temp, !(SNP.Name %in% paste0("Q", c(1:10)))) %>%
-  ddply(
-  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
-  summarise,
-  N_Sig_QTL = sum(Sig.Corrected == "yes")
-  ) %>%
-  ggplot(aes(x = Nids2, y = N_Sig_QTL, col = Nids2)) +
-  geom_jitter(aes(shape = NA)) +
-    geom_hline(yintercept = 10,lty = 2)+
-  facet_grid(Nsnps2 ~ Scenario2) +
-  theme_bw() +
-  theme(legend.position = "none",
-  axis.text.x = element_text(angle = 90)) +
-  ylab("Number of GWAS hits") +
-  xlab("")
-
-Fig2
-
-```
-
-##Number of significant GWAS hits (non-QTL)
-
-
-```{r gwas_nonqtl_2,fig.width = 7,fig.height = 7,fig.align = "center"}
-g4_2 <- g4[,colnames(g4) %in% colnames(g1)]
-g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
-
-
-temp <- rbind(g1,g2_2,g4_2)
-temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(g1),nrow(g2_2),nrow(g4_2))))
-temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
-                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
-                                "Small pop, FS"))
-
-temp$Nids2 <- paste("N =",temp$Nids)
-temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
-
-temp$Nsnps2 <- paste(temp$Nsnps,"SNPs")
-temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique(temp$Nsnps))],"SNPs"))
-
-Fig2 <-  subset(temp, !(SNP.Name %in% paste0("Q", c(1:10)))) %>%
-  ddply(
-  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
-  summarise,
-  N_Sig_QTL = sum(Sig.Corrected == "yes")
-  ) %>%
-  ggplot(aes(x = Nids2, y = N_Sig_QTL, col = Nids2)) +
-  geom_jitter() +
-    geom_hline(yintercept = 10,lty = 2)+
-  facet_grid(Nsnps2 ~ Scenario2) +
-  theme_bw() +
-  theme(legend.position = "none",
-  axis.text.x = element_text(angle = 90)) +
-  ylab("Number of GWAS hits") +
-  xlab("")
-
-Fig2
-
-```
-
-##Number of significant GWAS hits (non-QTL)
-
-
-```{r gwas_nonqtl_3,fig.width = 6,fig.height = 7,fig.align = "center"}
-g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
-
-
-temp <- rbind(g1,g2_2)
-temp$Scenario <- paste("Scenario",rep(c(1,2),c(nrow(g1),nrow(g2_2))))
-temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
-                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
-                                "Small pop, FS"))
-temp$Nids2 <- paste("N =",temp$Nids)
-temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
-
-temp$Nsnps2 <- paste(temp$Nsnps,"SNPs")
-temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique(temp$Nsnps))],"SNPs"))
-
-Fig2 <-  subset(temp, !(SNP.Name %in% paste0("Q", c(1:10)))) %>%
-  ddply(
-  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
-  summarise,
-  N_Sig_QTL = sum(Sig.Corrected == "yes")
-  ) %>%
-  ggplot(aes(x = Nids2, y = N_Sig_QTL, col = Nids2)) +
-  geom_jitter() +
-    geom_hline(yintercept = 10,lty = 2)+
-  facet_grid(Nsnps2 ~ Scenario2) +
-  theme_bw() +
-  theme(legend.position = "none",
-  axis.text.x = element_text(angle = 90)) +
-  ylab("Number of GWAS hits") +
-  xlab("")
-
-Fig2
-
-```
 
 ##Heritability
 
@@ -496,8 +287,159 @@ temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique
 
 Fig2 <-  
   ggplot(temp,aes(x = Nids2, y = H2, col = Nids2)) +
-  geom_jitter() +
+  geom_jitter(height = 0) +
   geom_hline(yintercept = 0.4,lty = 2)+
+  facet_grid(Nsnps2 ~ Scenario2) +
+  theme_bw() +
+  theme(legend.position = "none",
+  axis.text.x = element_text(angle = 90)) +
+  ylab("Number of GWAS hits") +
+  xlab("")
+
+Fig2
+
+```
+
+
+
+
+##Number of significant GWAS hits
+
+
+```{r gwas_nonqtl,fig.width = 7,fig.height = 7,fig.align = "center"}
+g4_2 <- g4[,colnames(g4) %in% colnames(g1)]
+g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
+
+
+temp <- rbind(g1,g2_2,g4_2)
+temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(g1),nrow(g2_2),nrow(g4_2))))
+temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
+                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
+                                "Small pop, FS"))
+temp$Nids2 <- paste("N =",temp$Nids)
+temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
+
+temp$Nsnps2 <- paste(temp$Nsnps,"SNPs")
+temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique(temp$Nsnps))],"SNPs"))
+
+Fig2 <-  subset(temp, !(SNP.Name %in% paste0("Q", c(1:10)))) %>%
+  ddply(
+  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
+  summarise,
+  N_Sig_QTL = sum(Sig.Corrected == "yes")
+  ) %>%
+  ggplot(aes(x = Nids2, y = N_Sig_QTL, col = Nids2)) +
+  geom_jitter(aes(shape = NA)) +
+    geom_hline(yintercept = 10,lty = 2)+
+  facet_grid(Nsnps2 ~ Scenario2) +
+  theme_bw() +
+  theme(legend.position = "none",
+  axis.text.x = element_text(angle = 90)) +
+  ylab("Number of GWAS hits") +
+  xlab("")
+
+Fig2
+
+```
+
+##Number of significant GWAS hits
+
+
+```{r gwas_nonqtl_2,fig.width = 7,fig.height = 7,fig.align = "center"}
+g4_2 <- g4[,colnames(g4) %in% colnames(g1)]
+g2_2 <- g2[,colnames(g2) %in% colnames(g1)]
+
+
+temp <- rbind(g1,g2_2,g4_2)
+temp$Scenario <- paste("Scenario",rep(c(1,2,3),c(nrow(g1),nrow(g2_2),nrow(g4_2))))
+temp$Scenario2 <- ifelse(temp$Scenario == "Scenario 1","Large pop",
+                         ifelse(temp$Scenario == "Scenario 2","Large pop, FS",
+                                "Small pop, FS"))
+
+temp$Nids2 <- paste("N =",temp$Nids)
+temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
+
+temp$Nsnps2 <- paste(temp$Nsnps,"SNPs")
+temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique(temp$Nsnps))],"SNPs"))
+
+Fig2 <-  subset(temp, !(SNP.Name %in% paste0("Q", c(1:10)))) %>%
+  ddply(
+  .(Nids2, Nsnps2, HistN, Full.Iteration.ID, Scenario2),
+  summarise,
+  N_Sig_QTL = sum(Sig.Corrected == "yes")
+  ) %>%
+  ggplot(aes(x = Nids2, y = N_Sig_QTL, col = Nids2)) +
+  geom_jitter(height = 0.2) +
+    geom_hline(yintercept = 10,lty = 2)+
+  facet_grid(Nsnps2 ~ Scenario2) +
+  theme_bw() +
+  theme(legend.position = "none",
+  axis.text.x = element_text(angle = 90)) +
+  ylab("Number of GWAS hits") +
+  xlab("")
+
+Fig2
+
+
+```
+
+
+
+##Number of significant GWAS peaks
+
+```{r peaks, fig.width = 7,fig.height = 7,fig.align = "center"}
+temp <- fp
+
+temp$QTL.Count <- temp$True.QTL.Count + temp$False.QTL.Count
+
+temp$Scenario2 <- ifelse(temp$Scenario == 1,"Large pop",
+                         ifelse(temp$Scenario == 2,"Large pop, FS",
+                                "Small pop, FS"))
+temp$Nids2 <- paste("N =",temp$Nids)
+temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
+
+temp$Nsnps2 <- paste(temp$Nsnps,"SNPs")
+temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique(temp$Nsnps))],"SNPs"))
+
+
+
+Fig2 <-  
+  ggplot(temp, aes(x = Nids2, y = QTL.Count, col = Nids2)) +
+  geom_jitter(height = 0.2) +
+      geom_hline(yintercept = 10,lty = 2)+
+  ylim(c(0,12)) +
+  facet_grid(Nsnps2 ~ Scenario2) +
+  theme_bw() +
+  theme(legend.position = "none",
+  axis.text.x = element_text(angle = 90)) +
+  ylab("Number of GWAS hits") +
+  xlab("")
+
+Fig2
+
+```
+
+
+##Number of false positive peaks
+
+```{r false positives, fig.width = 7,fig.height = 7,fig.align = "center"}
+temp <- fp
+
+
+temp$Scenario2 <- ifelse(temp$Scenario == 1,"Large pop",
+                         ifelse(temp$Scenario == 2,"Large pop, FS",
+                                "Small pop, FS"))
+temp$Nids2 <- paste("N =",temp$Nids)
+temp$Nids2 <- factor(temp$Nids2,levels = paste("N =",unique(temp$Nids)[order(unique(temp$Nids))]))
+
+temp$Nsnps2 <- paste(temp$Nsnps,"SNPs")
+temp$Nsnps2 <- factor(temp$Nsnps2,levels = paste(unique(temp$Nsnps)[order(unique(temp$Nsnps))],"SNPs"))
+
+
+
+Fig2 <-  
+  ggplot(temp, aes(x = Nids2, y = False.QTL.Count, col = Nids2)) +
+  geom_jitter(height = 0.1) +
   facet_grid(Nsnps2 ~ Scenario2) +
   theme_bw() +
   theme(legend.position = "none",

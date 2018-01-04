@@ -18,3 +18,5 @@ g4$Nids <- g4$Nids * 10
 h4$Nids <- h4$Nids * 10
 
 g4$Nsnps[g4$Nsnps > 150000] <- 2e05
+fp$Nsnps[fp$Nsnps > 150000] <- 2e05
+

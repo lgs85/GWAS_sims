@@ -29,3 +29,7 @@ g4 <- read.csv("Data/Scenario_4/Scenario_4_GWAS_results_Ne500.csv",stringsAsFact
 q1 <- read.csv("Data/Scenario_1_parsed_results/Scenario_1_qtl_effect_sizes.csv",stringsAsFactors = F)
 q2 <- read.csv("Data/Scenario_2.Susie/Scenario_2_qtl_effect_sizes_Ne500.csv",stringsAsFactors = F)
 q4 <- read.csv("Data/Scenario_4/Scenario_4_qtl_effect_sizes_Ne500.csv",stringsAsFactors = F)
+
+
+#False positives
+fp <- read.csv("Data/False.QTL.Rate.csv")
